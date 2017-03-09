@@ -14,5 +14,7 @@ git push
 rm -rf ../2048-build
 git checkout master
 git checkout .
+rm 2048.js
+rm style.js
 npm install
 grunt
