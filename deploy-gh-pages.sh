@@ -4,6 +4,7 @@ npm install
 grunt
 mkdir ../2048-build/
 cp -r dist/* ../2048-build/
+git checkout .
 git checkout gh-pages
 rm -rf *
 cp -r ../2048-build/* .
