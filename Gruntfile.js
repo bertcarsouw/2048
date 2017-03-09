@@ -49,6 +49,16 @@ module.exports = function(grunt) {
                     },
                 ],
             },
+            image: {
+                files: [
+                    {
+                        expand: true, 
+                        src: ['image/picard.jpg'], 
+                        dest: 'dist', 
+                        // filter: 'isFile'
+                    },
+                ],
+            }
         }
 
     });
@@ -61,6 +71,14 @@ module.exports = function(grunt) {
     grunt.loadNpmTasks('grunt-usemin');
 
     // build dist folder
-    grunt.registerTask('default', ['clean:dist', 'concat', 'uglify', 'cssmin', 'copy:index', 'usemin']);
+    grunt.registerTask('default', [
+        'clean:dist', 
+        'concat', 
+        'uglify', 
+        'cssmin', 
+        'copy:index', 
+        'copy:image', 
+        'usemin'
+    ]);
 
 };
