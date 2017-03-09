@@ -7,7 +7,7 @@ cp -r dist/* ../2048-build/
 git checkout gh-pages
 rm -rf *
 cp -r ../2048-build/* .
-git add .
+git add -A
 git commit -m "gh-pages update"
 git push
 rm -rf ../2048-build
