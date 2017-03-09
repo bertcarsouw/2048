@@ -85,6 +85,12 @@ function Board() {
 		window.addEventListener('touchstart', handleTouchStart, false);        
 		window.addEventListener('touchmove', handleTouchMove, false);
 
+		// mobile browsers set scores + new game off
+		if (typeof window.orientation !== 'undefined') { 
+			scoreBoard.className += ' hide';
+			newGameButton.className += ' hide';			
+		}
+
 	}
 
 	function setColor(color) {
