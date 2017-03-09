@@ -24,6 +24,11 @@ function Board() {
 		TWOHUNDREDFIFTYSIX: '#EDCC62'
 	};
 
+	// Swipe detection
+	var xDown = null,                                                       
+		yDown = null;                                                        
+
+
 	var scoreBoard = document.getElementById('score-board');
 	var scores = new Scores();
 	var score, highscore;
@@ -448,10 +453,6 @@ function Board() {
 			}
  		}
 	}
-
-	// Swipe controls for mobile devices
-	var xDown = null;                                                        
-	var yDown = null;                                                        
 
 	function handleTouchStart(event) {                                         
 	    xDown = event.touches[0].clientX;                                      
