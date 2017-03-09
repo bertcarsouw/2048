@@ -12,5 +12,6 @@ git commit -m "gh-pages update"
 git push
 rm -rf ../2048-build
 git checkout master
+git checkout .
 npm install
 grunt
