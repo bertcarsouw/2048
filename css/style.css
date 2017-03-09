@@ -1,0 +1,84 @@
+body {
+	text-align: center;
+}
+
+canvas {
+	width: 800px;
+	height: 800px;
+	margin-top: 50px;
+	-webkit-border-radius: 10px; 
+    -moz-border-radius: 10px; 
+  	border-radius: 10px; 
+}
+
+#score-board {
+	position: fixed;
+	height: 100%;
+	width: 400px;
+	left: 50px;
+	top: 50px;
+	text-align: left;
+}
+
+button {
+	position: fixed;
+	right: 50px;
+	top: 50px;
+	background: #8f7a66;
+	border: none;
+	color: white;
+	padding: 15px;
+	font-size: 20px;
+	font-weight: 600;
+	-webkit-border-radius: 5px; 
+    -moz-border-radius: 5px; 
+  	border-radius: 5px;
+}
+
+button:focus {
+	outline: 0;
+}
+
+button:hover {
+	cursor: pointer;
+}
+
+#score-board div {
+	background: #8f7a66;
+	margin-bottom: 20px;
+	padding: 17px;
+	width: 60px;
+	text-align: center;
+	font-weight: 600;
+	color: #CDC0B4;
+	-webkit-border-radius: 10px; 
+    -moz-border-radius: 10px; 
+  	border-radius: 10px;
+}
+
+span {
+	display: block;
+	font-size: 24px;
+	color: white;
+	color: #FBF5F2;
+}
+
+#win-message {
+	position: fixed;
+	height: 100%;
+	width: 100%;
+	top: 0;
+	left: 0;
+    background-color: rgb(0, 0, 0);
+    background-color: rgba(0, 0, 0, 0.6);
+    filter:progid:DXImageTransform.Microsoft.gradient(startColorstr=#99000000, endColorstr=#99000000);
+    -ms-filter: "progid:DXImageTransform.Microsoft.gradient(startColorstr=#99000000, endColorstr=#99000000)";
+}
+
+img {
+	margin-top: 10%;
+}
+
+.hide {
+	display: none;
+}

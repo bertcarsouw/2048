@@ -1,9 +1,6 @@
 function Board() {
 
-	this.fillCell = fillCell;
-	this.emptyCell = emptyCell;
-	this.slideCell = slideCell;
-	this.generateRandomCell = generateRandomCell;
+	this.start = start;
 
 	var context, 
 		cells = [],
@@ -27,6 +24,13 @@ function Board() {
 		TWOHUNDREDFIFTYSIX: '#EDCC62'
 	};
 
+	var scoreBoard = document.getElementById('score-board');
+	var scores = new Scores();
+	var score, highscore;
+
+	var newGameButton = document.getElementsByTagName('button')[0];
+	var winningMessage = document.getElementById('win-message');
+
 	var LEFT_BORDER_INDEXES = [0, 4, 8, 12];
 	var RIGHT_BORDER_INDEXES = [3, 7, 11, 15];
 	var BOTTOM_BORDER_INDEXES = [12, 13, 14, 15];
@@ -44,18 +48,28 @@ function Board() {
 		RIGHT: 4
 	};
 
-	init();
+	function start() {
 
-	function init() {
 		var canvas = document.getElementsByTagName('canvas')[0];
 		canvas.width = BOARD_WIDTH; 
 		canvas.height = BOARD_WIDTH; 
 		context = canvas.getContext('2d');
-		for (var cellCounter = 0; cellCounter < 16; cellCounter++) {
-			cells.push(0);
-			emptyCell(cellCounter);
-		}
+		
+		retrieveState();
+
 		drawBorders();
+
+		updateScore();
+		updateHighscore();
+		
+		window.onbeforeunload = function() {
+			saveState();
+		}
+
+		newGameButton.onclick = newGame;
+
+		winningMessage.onclick = hideWinningMessage;
+
 		document.onkeydown = function(event) {
 			if (event.key === 'ArrowUp') {
 				if (animating === 0) moveInDirection(directions.UP);
@@ -67,6 +81,7 @@ function Board() {
 				if (animating === 0) moveInDirection(directions.RIGHT);
 			}
 		}
+
 	}
 
 	function setColor(color) {
@@ -77,8 +92,19 @@ function Board() {
 		}
 	}
 
+	function newGame() {
+		for (var counter = 0; counter < cells.length; counter++) {
+			cells[counter] = 0;
+			emptyCell(counter);
+		}
+		generateRandomCell();
+		score = 0;
+		updateScore();
+		saveState();
+	}
+
 	function generateRandomCell() {
-		var random = Math.floor(Math.random() * 10) + 1 ;
+		var random = Math.floor(Math.random() * 10) + 1;
 		var twoOrFour = 2;
 		if (random === 4) {
 			twoOrFour = 4;
@@ -245,6 +271,84 @@ function Board() {
 		return color;
 	}
 
+	function showWinningMessage() {
+		winningMessage.className = winningMessage.className.replace('hide', '').trim();
+	}
+
+	function hideWinningMessage() {
+		alert(winningMessage.className);
+		if (winningMessage.className.indexOf('hide') === -1) {
+			alert('1');
+			winningMessage.className += ' hide';
+		}
+	}
+
+	function updateScore() {
+		scoreBoard.children[1].children[0].innerHTML = score;
+	}
+
+	function updateHighscore() {
+		scoreBoard.children[0].children[0].innerHTML = highscore;	
+	}
+
+	function saveState() {
+		if (scores.supported()) {
+			if (score > highscore) {
+				highscore = score;
+			}
+			var saveObject = { cells: cells, score: score, highscore: highscore };
+			scores.store('2048-bertcarsouw', JSON.stringify(saveObject));
+		}
+	}
+
+	function retrieveState() {
+		if (scores.supported()) {
+			var data = scores.retrieve('2048-bertcarsouw');
+			if (data === null) {
+				score = 0;
+				for (var cellCounter = 0; cellCounter < 16; cellCounter++) {
+					cells.push(0);
+					emptyCell(cellCounter);
+				}
+				highscore = 0;
+				generateRandomCell();
+			} else {
+				data = JSON.parse(data);
+				score = data.score;
+				if (!data.score) {
+					score = 0;
+				}
+				highscore = data.highscore;
+				if (!data.highscore) {
+					highscore = 0;
+				}
+				if (data.cells) {
+					cells = data.cells;
+					var cellSet = false;
+					for (var counter = 0; counter < cells.length; counter++) {
+						if (cells[counter] > 0) {
+							cellSet = true;
+							fillCell(cells[counter], counter);
+						} else {
+							emptyCell(counter);
+						}
+					}
+					if (!cellSet) {
+						generateRandomCell();
+					}
+				}
+			}
+		} else {
+			for (var cellCounter = 0; cellCounter < 16; cellCounter++) {
+				cells.push(0);
+				emptyCell(cellCounter);
+			}
+			generateRandomCell();
+			score = 0;
+			highscore = 0;
+		}
+	}
+
 	function moveInDirection(direction) {
 		var borderIndexes;
 		var secondIndex;
@@ -292,9 +396,15 @@ function Board() {
 					slideCell(cellCounter, cellCounter + secondIndex, function() {
 						if (cellCounter < 16) {
 							cells[cellCounter + secondIndex] = cells[cellCounter] * 2;
+							score += cells[cellCounter + secondIndex];
+							updateScore();
 							if (cells[cellCounter + secondIndex] === 2048) {
 								// winningspree game over
-								alert('Winningspree motherfucker!! You can continue playing don\'t know what\'s going to happen though..');
+								showWinningMessage();
+							}
+							if (score > highscore) {
+								highscore = score;
+								updateHighscore();								
 							}
 							theMeltedOnes.push(cellCounter + secondIndex);
 							cells[cellCounter] = 0;

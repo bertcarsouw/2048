@@ -3,14 +3,20 @@
 	<head>
 		<meta charset="utf-8">
 		<title>2048</title>
-		<link rel="stylesheet" type="text/css" href="style.css">
+		<link rel="stylesheet" type="text/css" href="css/style.css">
 	</head>
 	<body>
+		<div id="score-board">
+			<div>BEST<span></span></div>
+			<div>SCORE<span></span></div>
+		</div>
 		<canvas></canvas>
-		<script src="board.js"></script>
+		<button>new game</button>
+		<div id="win-message" class="hide"><img src="image/picard.jpg"/></div>
+		<script src="js/scores.js"></script>
+		<script src="js/board.js"></script>
 		<script type="text/javascript">
-			var board = new Board();
-			board.generateRandomCell();
+			new Board().start();
 		</script>
 	</body>
 </html>
