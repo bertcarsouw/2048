@@ -82,6 +82,9 @@ function Board() {
 			}
 		}
 
+		window.addEventListener('touchstart', handleTouchStart, false);        
+		window.addEventListener('touchmove', handleTouchMove, false);
+
 	}
 
 	function setColor(color) {
@@ -439,6 +442,40 @@ function Board() {
 			}
  		}
 	}
+
+	// Swipe controls for mobile devices
+	var xDown = null;                                                        
+	var yDown = null;                                                        
+
+	function handleTouchStart(event) {                                         
+	    xDown = event.touches[0].clientX;                                      
+	    yDown = event.touches[0].clientY;                                      
+	};                                                
+
+	function handleTouchMove(event) {
+	    if (!xDown || !yDown) {
+	        return;
+	    }
+	    var xUp = event.touches[0].clientX;                                    
+	    var yUp = event.touches[0].clientY;
+	    var xDiff = xDown - xUp;
+	    var yDiff = yDown - yUp;
+	    if (Math.abs(xDiff) > Math.abs(yDiff)) {
+	        if (xDiff > 0) {
+	        	if (animating === 0) moveInDirection(directions.LEFT);
+	        } else {
+	        	if (animating === 0) moveInDirection(directions.RIGHT);
+	        }                       
+	    } else {
+	        if (yDiff > 0) {
+	        	if (animating === 0) moveInDirection(directions.UP);
+	        } else {
+	        	if (animating === 0) moveInDirection(directions.DOWN);
+	        }                                                                 
+	    }
+	    xDown = null;
+	    yDown = null;                                             
+	};
 
 }
 
